@@ -1,0 +1,53 @@
+doctype html 
+
+html 
+    head
+        title=title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src='/javascript/main.js')
+        script. 
+
+
+    body 
+        h1=title
+        button(onclick=) Create Product Category
+        button(onclick=) Delete All Products
+        button(onclick="nav('/')") Back
+
+        div
+            span &nbsp;
+
+        table
+            thead 
+                tr 
+                    th Product Name 
+                    th Brand 
+                    th SKU 
+                    th Quantity 
+                    th Price 
+                    th Cost 
+                    th Category
+                    th Product Description 
+                    th Product Image 
+                    th External Product URL
+                    th Internal Notes
+                    th Edit 
+                    th Delete
+            tbody 
+            - each product in inventory 
+                tr 
+                    td= product.product_name 
+                    td= product.brand
+                    td= product.sku 
+                    td= product.quantity 
+                    td= product.price 
+                    td= product.cost 
+                    td= product.category_name
+                    td= product.ext_description 
+                    td  #[a(href=product.product_img) URL]
+                    td  #[a(href=product.ext_product_url) URL] 
+                    td= product.int_notes
+                    td
+                        button Edit 
+                    td 
+                        button Delete

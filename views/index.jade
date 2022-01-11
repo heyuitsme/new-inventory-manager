@@ -1,0 +1,20 @@
+extends layout
+
+
+block content
+
+  script. 
+    let logging = () => {console.log("Testing")};
+
+    let nav = (path) => {
+      window.location.href = path
+    };
+
+
+  h1= title
+  p Welcome to the #{title}
+  
+  button(id="read", onclick="nav(this.id)") View Inventory 
+
+  button(id="create", onclick="nav(this.id)") Create Inventory 
+
