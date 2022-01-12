@@ -3,19 +3,23 @@ const path = require('path');
 const sequelize = require('./database');
 const Inventory = require('./models/Inventory');
 const Category = require('./models/Category');
+// const Test = require('./models/Test');
 const {mockData} = require('./data/mockData');
 const { QueryTypes } = require('sequelize');
+const bodyParser = require('body-parser');
 
 const dbConnect = sequelize.sync({ force: true }).then(() => console.log('Database is ready.'));
 
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // endpoints for inventory API
 app.post('/api/inventory', async (req, res) => {
-    await Inventory.create(req.body)
+    await Inventory.create(req.body);
     res.send('Inventory has been added successfully.');
 });
 
@@ -44,14 +48,42 @@ app.delete('/api/inventory/:id', async (req, res) => {
     res.send('Deleted selected inventory.');
 });
 
+
+
+
+
+
+
+
+
+
 /* endpoints for form submission */
 
 // create new product
-app.post('/inventory', async (req, res) => {
-    await Inventory.create(req.body)
-    res.send('Inventory has been added successfully.');
-    console.log('Added product successfully.');
+app.post('/inventory', (req, res) => {
+    Inventory.create({
+        product_name: req.body.product_name,
+        brand: req.body.brand,
+        sku: req.body.sku,
+        quantity: req.body.quantity,
+        price: req.body.price,
+        cost: req.body.cost,
+        active: req.body.active,
+        category_id: 1,
+        ext_description: req.body.ext_description,
+        product_img: req.body.product_img,
+        ext_product_url: req.body.ext_product_url,
+        int_notes: req.body.int_notes
+    });
+    res.send(req.body);
 });
+
+
+
+
+
+
+
 
 
 

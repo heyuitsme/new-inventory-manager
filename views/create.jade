@@ -6,7 +6,9 @@ html
         link(rel='stylesheet', href='/stylesheets/style.css')
         script(src='/javascript/main.js')
 
-        script. 
+        script.
+
+
 
 
 
@@ -16,6 +18,7 @@ html
 
         button(onclick=) Create New Product Category
         button(onclick="nav('/')") Back
+        button(onclick="fill()") Fill
 
         div
             span &nbsp;
@@ -26,7 +29,7 @@ html
                     input(id='product_name', type='text', value='', name='product_name')
             div
                 span &nbsp;
-            
+
             div 
                 label(for='brand') Brand 
                     input(id='brand', type='text', value='', name='brand')
@@ -47,13 +50,13 @@ html
             
             div 
                 label(for='price') Price 
-                    input(id='price', type='number', value='', name='price')
+                    input(id='price', type='number', value='', name='price', step='.01')
             div
                 span &nbsp;
             
             div 
                 label(for='cost') Cost 
-                    input(id='cost', type='number', value='', name='cost')
+                    input(id='cost', type='number', value='', name='cost', step='.01')
             div
                 span &nbsp;
             
@@ -65,9 +68,9 @@ html
             
             div 
                 label(for='category') Category 
-                    select 
-                        each name in category 
-                            option(selected=name.category_name == name.id) #{name.category_name}
+                    select(id='category')
+                        each row in category 
+                            option(value=row.id) #{row.category_name}
             div
                 span &nbsp;
 
