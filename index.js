@@ -64,7 +64,6 @@ app.delete('/api/inventory/:id', async (req, res) => {
 });
 
 
-// create new product
 app.post('/inventory', async (req, res) => {
     Inventory.create({
         product_name: req.body.product_name,
@@ -83,7 +82,7 @@ app.post('/inventory', async (req, res) => {
     res.render('success', { title: 'Success', message: 'Added new product successfully!'});
 });
 
-// edit existing inventory from edit page
+
 app.post('/inventory/:id', async (req, res) => {
     const inventoryId = req.params.id;
     Inventory.update({
@@ -104,29 +103,25 @@ app.post('/inventory/:id', async (req, res) => {
         }
     });
 
-    const inventory = await sequelize.query(`SELECT * FROM inventory i
-    JOIN category c ON i.category_id = c.id`, { type: QueryTypes.SELECT });
-    res.render('read', { title: 'View Current Inventory', inventory });
+    res.render('success', { title: 'Success', message: 'Edited product successfully!' });
 });
 
 
-// start server and load mock data into db
 app.listen(3000, async () => {
     loadData();
     console.log('Server started (http://localhost:3000/)');
 });
 
-// set view engine
+
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, '/views'));
 
-// get home page
+
 app.get('/', (req, res) => {
     res.render('index', { title: 'Inventory Manager' });
 });
 
 
-// get read inventory page
 app.get('/read', async (req, res) => {
     const db = await dbConnect;
     const inventory = await sequelize.query(`SELECT * FROM inventory i
@@ -135,7 +130,6 @@ app.get('/read', async (req, res) => {
 });
 
 
-// get create inventory page
 app.get('/create', async (req, res) => {
     const db = await dbConnect;
     const category = await Category.findAll();
@@ -143,7 +137,6 @@ app.get('/create', async (req, res) => {
 });
 
 
-// get edit inventory page
 app.get('/edit/:id', async (req, res) => {
     const inventoryId = req.params.id;
     const db = await dbConnect;

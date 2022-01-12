@@ -10,13 +10,14 @@ html
     body 
         h1=title
 
-        button(form='product-form', type='reset', name='reset') Clear All
-        | &nbsp;
+
         button(onclick='nav("/")') Home
+        | &nbsp;
+        button(onclick='back()') Back
         | &nbsp;
         button(onclick='fill()') Fill
         | &nbsp;
-        button(onclick='back()') Back
+        button(form='product-form', type='reset', name='reset') Clear All
         | &nbsp;
 
         div
