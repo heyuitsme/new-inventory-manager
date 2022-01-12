@@ -6,22 +6,23 @@ html
         link(rel='stylesheet', href='/stylesheets/style.css')
         script(src='/javascript/main.js')
 
-        script.
-
 
     body 
         h1=title
-
-        button(onclick=) Create New Product Category
+        | &nbsp;
         button(form='product-form', type='reset', name='reset') Clear All
-        button(onclick="nav('/')") Back
+        | &nbsp;
+        button(onclick='nav("/")') Home
+        | &nbsp;
+        button(onclick='back()') Back
+        | &nbsp;
 
         div
             span &nbsp;
 
         - for product in inventory
             - var id = product.id
-                form(id='product-form', action=, method=)
+                form(id='product-form', action='/inventory/#{id}', method='post')
                     div 
                         label(for='product_name') Product Name 
                             input(id='product_name', type='text', value=product.product_name, name='product_name')
@@ -95,7 +96,7 @@ html
                     
                     div 
                         //- input(id='edit-button', type='submit', value='Update Product', name='edit', onclick='editInventory("#{id}")')
-                        button(id='edit-button', onclick='editInventory(#{id})') Update Product
+                        button(id='edit-button', type='submit') Update Product
             
                 
             

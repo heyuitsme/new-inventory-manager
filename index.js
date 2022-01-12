@@ -3,18 +3,20 @@ const path = require('path');
 const sequelize = require('./database');
 const Inventory = require('./models/Inventory');
 const Category = require('./models/Category');
-const {mockData} = require('./data/mockData');
+const { mockData } = require('./data/mockData');
 const { QueryTypes } = require('sequelize');
 const bodyParser = require('body-parser');
 
 const csv = require('fast-csv');
 const fs = require('fs');
-const ws = fs.createWriteStream('inventory_export.csv');
+const res = require('express/lib/response');
+
 
 const dbConnect = sequelize.sync({ force: true }).then(() => console.log('Database is ready.'));
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,16 +64,8 @@ app.delete('/api/inventory/:id', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-/* endpoints for form submission */
-
 // create new product
-app.post('/inventory', (req, res) => {
+app.post('/inventory', async (req, res) => {
     Inventory.create({
         product_name: req.body.product_name,
         brand: req.body.brand,
@@ -79,18 +73,20 @@ app.post('/inventory', (req, res) => {
         quantity: req.body.quantity,
         price: req.body.price,
         cost: req.body.cost,
-        category_id: 1,
+        category_id: req.body.category_id,
         ext_description: req.body.ext_description,
         product_img: req.body.product_img,
         ext_product_url: req.body.ext_product_url,
         int_notes: req.body.int_notes
     });
-    res.send(req.body);
+
+    res.render('success', { title: 'Success', message: 'Added new product successfully!'});
 });
 
-app.put('/inventory/:id', (req, res) => {
+// edit existing inventory from edit page
+app.post('/inventory/:id', async (req, res) => {
     const inventoryId = req.params.id;
-    Inventory.set({
+    Inventory.update({
         product_name: req.body.product_name,
         brand: req.body.brand,
         sku: req.body.sku,
@@ -107,22 +103,11 @@ app.put('/inventory/:id', (req, res) => {
             id: inventoryId
         }
     });
-    res.send('Updated product, cool.');
+
+    const inventory = await sequelize.query(`SELECT * FROM inventory i
+    JOIN category c ON i.category_id = c.id`, { type: QueryTypes.SELECT });
+    res.render('read', { title: 'View Current Inventory', inventory });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // start server and load mock data into db
@@ -135,15 +120,11 @@ app.listen(3000, async () => {
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, '/views'));
 
-// use static assets in public folder
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-/* routing section */
 // get home page
 app.get('/', (req, res) => {
     res.render('index', { title: 'Inventory Manager' });
 });
+
 
 // get read inventory page
 app.get('/read', async (req, res) => {
@@ -169,6 +150,12 @@ app.get('/edit/:id', async (req, res) => {
     const category = await Category.findAll();
     const inventory = await Inventory.findAll({ where: { id: inventoryId } });
     res.render('edit', { title: 'Edit Inventory', category, inventory})
+});
+
+
+app.get('/read/download', async (req, res) => {
+    exportData();
+    res.render('success', { title: 'Success', message: 'File has been downloaded to your default download folder.' });
 })
 
 
@@ -180,28 +167,25 @@ const loadData = async () => {
 };
 
 
-// const exportData = async () => {
-//     const db = await dbConnect;
-    // const inventory = await Inventory.findAll();
+const exportData = async () => {
+    const db = await dbConnect;
+    const inventory = await Inventory.findAll();
 
-    const jsonData = [ { id: 1,
-        name: 'Node.js',
-        description: 'JS web applications',
-        created_at: '2021-09-02' },
-      { id: 2,
-        name: 'Vue.js',
-        description: 'for building UI',
-        created_at: '2021-09-05' },
-      { id: 3,
-        name: 'Angular.js',
-        description: 'for building mobile & desktop web app',
-        created_at: '2021-09-08' } ];
+    const resArr = [];
+    for (let i=0; i<inventory.length; i++) {
+        resArr.push(inventory[i].dataValues);
+    };
+
+    let exportName = 'inventory_export.csv';
+    let downloadDir = path.join(process.env.HOME || process.env.USERPROFILE, 'downloads/');
+    let file_path = path.join(downloadDir,exportName);
+
+    const ws = fs.createWriteStream(file_path);
 
     csv
-        .write(jsonData, { headers: true })
+        .write(resArr, { headers: true })
         .on('finish', () => {
             console.log('Finished writing to CSV.');
         })
         .pipe(ws);
-
-// }
+};

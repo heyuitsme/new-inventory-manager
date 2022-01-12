@@ -6,13 +6,18 @@ html
         link(rel='stylesheet', href='/stylesheets/style.css')
         script(src='/javascript/main.js')
 
-        script. 
-
 
     body 
         h1=title
-        button(onclick=) Create Product Category
-        button(onclick="nav('/')") Back
+        | &nbsp;
+        button(onclick='nav("/read/download")') Download All
+        | &nbsp;
+        button(onclick='nav("/create")') Add New Product
+        | &nbsp;
+        button(onclick='nav("/")') Home
+        | &nbsp;
+        button(onclick='back()') Back
+        | &nbsp;
 
         div
             span &nbsp;
@@ -49,6 +54,6 @@ html
                         td  #[a(href=product.ext_product_url) URL] 
                         td= product.int_notes
                         td
-                            button(onclick=) Edit 
+                            button(onclick='nav("/edit/#{id}")') Edit 
                         td 
                             button(onclick='deleteInventory("#{id}")') Delete 

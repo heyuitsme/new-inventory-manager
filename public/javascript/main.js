@@ -1,11 +1,15 @@
 
-// function to navigate back to root
+// nav functions
 let nav = (path) => {
-    window.location.href = path
+    window.location.href = path;
 };
 
+let back = () => {
+    history.back();
+}
 
-// pre-fill creat form
+
+// pre-fill create form
 let fill = () => {
     document.getElementById('product_name').value = 'Thruster K15';
     document.getElementById('brand').value = 'Victor';
@@ -20,18 +24,10 @@ let fill = () => {
 };
 
 
-// delete inventory
+// delete inventory helper
 let deleteInventory = (id) => {
     const url = '/api/inventory/' + id;
     fetch(url, {method: 'DELETE'});
     location.reload();
 };
-
-
-// edit inventory
-let editInventory = (id) => {
-    const url = '/api/inventory/' + id;
-    fetch(url, {method: 'PUT'});
-    // location.reload();
-}
 

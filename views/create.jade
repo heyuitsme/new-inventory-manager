@@ -6,20 +6,18 @@ html
         link(rel='stylesheet', href='/stylesheets/style.css')
         script(src='/javascript/main.js')
 
-        script.
-
-
-
-
-
 
     body 
         h1=title
 
-        button(onclick=) Create New Product Category
         button(form='product-form', type='reset', name='reset') Clear All
-        button(onclick="nav('/')") Back
-        button(onclick="fill()") Fill
+        | &nbsp;
+        button(onclick='nav("/")') Home
+        | &nbsp;
+        button(onclick='fill()') Fill
+        | &nbsp;
+        button(onclick='back()') Back
+        | &nbsp;
 
         div
             span &nbsp;
@@ -62,10 +60,11 @@ html
                 span &nbsp;
 
             div 
-                label(for='category') Category 
-                    select(id='category')
+                label(for='category_id') Category 
+                    select(id='category_id', name='category_id')
                         each row in category 
-                            option(value=row.id) #{row.category_name}
+                            - var id = row.id
+                                option(value='#{id}') #{row.category_name}
             div
                 span &nbsp;
 

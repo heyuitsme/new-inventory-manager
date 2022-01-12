@@ -1,0 +1,17 @@
+doctype html 
+
+html 
+    head
+        title=title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src='/javascript/main.js')
+
+
+    body 
+        h1 Success
+        p=message
+        | &nbsp;
+        button(onclick='nav("/")') Home
+        | &nbsp;
+        button(onclick='back()') Back
+

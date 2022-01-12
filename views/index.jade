@@ -3,18 +3,16 @@ extends layout
 
 block content
 
-  script. 
-    let logging = () => {console.log("Testing")};
-
-    let nav = (path) => {
-      window.location.href = path
-    };
+  head
+    title=title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascript/main.js')
 
 
   h1= title
   p Welcome to the #{title}
-  
+  | &nbsp;
   button(id="read", onclick="nav(this.id)") View Inventory 
-
+  | &nbsp;
   button(id="create", onclick="nav(this.id)") Create Inventory 
 
