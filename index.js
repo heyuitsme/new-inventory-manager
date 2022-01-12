@@ -3,10 +3,13 @@ const path = require('path');
 const sequelize = require('./database');
 const Inventory = require('./models/Inventory');
 const Category = require('./models/Category');
-// const Test = require('./models/Test');
 const {mockData} = require('./data/mockData');
 const { QueryTypes } = require('sequelize');
 const bodyParser = require('body-parser');
+
+const csv = require('fast-csv');
+const fs = require('fs');
+const ws = fs.createWriteStream('inventory_export.csv');
 
 const dbConnect = sequelize.sync({ force: true }).then(() => console.log('Database is ready.'));
 
@@ -36,10 +39,20 @@ app.get('/api/inventory/:id', async (req, res) => {
 
 app.put('/api/inventory/:id', async (req, res) => {
     const inventoryId = req.params.id;
-    const inventory = await Inventory.findOne({ where: { id: inventoryId }});
-    inventory.quantity = req.body.quantity;
-    await inventory.save();
-    res.send('Updated quantity.');
+    const product = await Inventory.findOne({ where: { id: inventoryId }});
+    product.product_name = req.body.product_name;
+    product.brand = req.body.brand;
+    product.sku = req.body.sku;
+    product.quantity = req.body.quantity;
+    product.price = req.body.price;
+    product.cost = req.body.cost;
+    product.category_id = req.body.category_id;
+    product.ext_description = req.body.ext_description;
+    product.product_img = req.body.product_img;
+    product.ext_product_url = req.body.ext_product_url;
+    product.int_notes = req.body.int_notes;
+    await product.save();
+    res.send('Updated product successfully.');
 });
 
 app.delete('/api/inventory/:id', async (req, res) => {
@@ -47,8 +60,6 @@ app.delete('/api/inventory/:id', async (req, res) => {
     await Inventory.destroy({ where: { id: inventoryId }});
     res.send('Deleted selected inventory.');
 });
-
-
 
 
 
@@ -68,7 +79,6 @@ app.post('/inventory', (req, res) => {
         quantity: req.body.quantity,
         price: req.body.price,
         cost: req.body.cost,
-        active: req.body.active,
         category_id: 1,
         ext_description: req.body.ext_description,
         product_img: req.body.product_img,
@@ -77,6 +87,30 @@ app.post('/inventory', (req, res) => {
     });
     res.send(req.body);
 });
+
+app.put('/inventory/:id', (req, res) => {
+    const inventoryId = req.params.id;
+    Inventory.set({
+        product_name: req.body.product_name,
+        brand: req.body.brand,
+        sku: req.body.sku,
+        quantity: req.body.quantity,
+        price: req.body.price,
+        cost: req.body.cost,
+        category_id: req.body.category_id,
+        ext_description: req.body.ext_description,
+        product_img: req.body.product_img,
+        ext_product_url: req.body.ext_product_url,
+        int_notes: req.body.int_notes
+    }, {
+        where: {
+            id: inventoryId
+        }
+    });
+    res.send('Updated product, cool.');
+});
+
+
 
 
 
@@ -128,6 +162,16 @@ app.get('/create', async (req, res) => {
 });
 
 
+// get edit inventory page
+app.get('/edit/:id', async (req, res) => {
+    const inventoryId = req.params.id;
+    const db = await dbConnect;
+    const category = await Category.findAll();
+    const inventory = await Inventory.findAll({ where: { id: inventoryId } });
+    res.render('edit', { title: 'Edit Inventory', category, inventory})
+})
+
+
 const loadData = async () => {
     const db = await dbConnect;
     await Category.bulkCreate(mockData.category);
@@ -135,3 +179,29 @@ const loadData = async () => {
     console.log('Mock data loaded successfully.');
 };
 
+
+// const exportData = async () => {
+//     const db = await dbConnect;
+    // const inventory = await Inventory.findAll();
+
+    const jsonData = [ { id: 1,
+        name: 'Node.js',
+        description: 'JS web applications',
+        created_at: '2021-09-02' },
+      { id: 2,
+        name: 'Vue.js',
+        description: 'for building UI',
+        created_at: '2021-09-05' },
+      { id: 3,
+        name: 'Angular.js',
+        description: 'for building mobile & desktop web app',
+        created_at: '2021-09-08' } ];
+
+    csv
+        .write(jsonData, { headers: true })
+        .on('finish', () => {
+            console.log('Finished writing to CSV.');
+        })
+        .pipe(ws);
+
+// }

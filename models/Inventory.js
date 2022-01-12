@@ -29,11 +29,6 @@ Inventory.init({
         type: DataTypes.DOUBLE(2), 
         allowNull: false
     },
-    active: {
-        type: DataTypes.BOOLEAN, 
-        allowNull: false,
-        defaultvalue: 1
-    },
     category_id: {
         type: DataTypes.INTEGER, 
         allowNull: false

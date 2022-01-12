@@ -17,6 +17,7 @@ html
         h1=title
 
         button(onclick=) Create New Product Category
+        button(form='product-form', type='reset', name='reset') Clear All
         button(onclick="nav('/')") Back
         button(onclick="fill()") Fill
 
@@ -59,13 +60,7 @@ html
                     input(id='cost', type='number', value='', name='cost', step='.01')
             div
                 span &nbsp;
-            
-            div 
-                label(for='active') Active 
-                    input(id='active', type='number', value='', name='active')
-            div
-                span &nbsp;
-            
+
             div 
                 label(for='category') Category 
                     select(id='category')
@@ -103,7 +98,6 @@ html
             
             div 
                 input(id='submit-button', type='submit', value='Save Product', name='submit')
-                input(id='reset-button', type='reset', value='Clear All', name='reset')
         
                 
             
