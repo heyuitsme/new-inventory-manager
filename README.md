@@ -5,7 +5,7 @@ This is a simple inventory manager that allows users to add, view, update, and d
 ## How to run app:
 ...instructions assume you already have a current version of node installed on your system...
 
-1. Create directory on system. (`mkdir <directory name>`)
+1. Create directory on system. (`mkdir <directory>`)
 2. Cd to new directory or desired directory. (`cd <relative path of directory>`)
 3. Copy HTTPS clone url from Github repo. 
 4. Run command `git clone <url>` to clone repo to local. 
