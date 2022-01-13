@@ -14,7 +14,7 @@ Inventory.init({
     },
     sku: {
         type: DataTypes.STRING, 
-        allowNull: false,
+        allowNull: false
         // unique: true
     },
     quantity: {
@@ -37,10 +37,12 @@ Inventory.init({
         type: DataTypes.TEXT
     },
     product_img: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     ext_product_url: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     int_notes: {
         type: DataTypes.TEXT

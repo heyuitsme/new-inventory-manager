@@ -13,3 +13,8 @@ This is a simple inventory manager that allows users to add, view, update, and d
 6. Run command `npm install` to install dependencies.
 7. Run command `npm start` to start app. 
 8. Go to `http://localhost:3000/` to interact with app. 
+
+
+## Basic requirements: 
+1. Create a simple inventory app with limited UI to create, read, update and delete inventory. 
+2. (optional extra) Add a button to export all products to a CSV file. 

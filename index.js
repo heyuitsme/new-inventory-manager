@@ -6,6 +6,7 @@ const Category = require('./models/Category');
 const { mockData } = require('./data/mockData');
 const { QueryTypes } = require('sequelize');
 const bodyParser = require('body-parser');
+const { body, validationResult } = require('express-validator');
 
 const csv = require('fast-csv');
 const fs = require('fs');
@@ -64,46 +65,83 @@ app.delete('/api/inventory/:id', async (req, res) => {
 });
 
 
-app.post('/inventory', async (req, res) => {
-    Inventory.create({
-        product_name: req.body.product_name,
-        brand: req.body.brand,
-        sku: req.body.sku,
-        quantity: req.body.quantity,
-        price: req.body.price,
-        cost: req.body.cost,
-        category_id: req.body.category_id,
-        ext_description: req.body.ext_description,
-        product_img: req.body.product_img,
-        ext_product_url: req.body.ext_product_url,
-        int_notes: req.body.int_notes
-    });
+app.post(
+    '/inventory', 
+    body('quantity').isInt({ min: 1 }),
+    body('product_img').isURL(),
+    body('ext_product_url').isURL(),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            console.log({ errors: errors.array() });
+            const errReason = [];
+            for (let i=0;i<errors.array().length;i++) {
+                errReason.push(errors.array()[i].param.toUpperCase());
+            }
+            return res.render('error', { 
+                title: 'Something went wrong...', 
+                reason: errReason,
+                message: 'Looks like one or more fields need to be corrected. Please see below and click Back to try again, or Home to return to the main page.' 
+            });
+        };
+        Inventory.create({
+            product_name: req.body.product_name,
+            brand: req.body.brand,
+            sku: req.body.sku,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            cost: req.body.cost,
+            category_id: req.body.category_id,
+            ext_description: req.body.ext_description,
+            product_img: req.body.product_img,
+            ext_product_url: req.body.ext_product_url,
+            int_notes: req.body.int_notes
+        });
 
-    res.render('success', { title: 'Success', message: 'Added new product successfully!'});
+        res.render('success', { title: 'Success', message: 'Added new product successfully!'});
+    
 });
 
 
-app.post('/inventory/:id', async (req, res) => {
-    const inventoryId = req.params.id;
-    Inventory.update({
-        product_name: req.body.product_name,
-        brand: req.body.brand,
-        sku: req.body.sku,
-        quantity: req.body.quantity,
-        price: req.body.price,
-        cost: req.body.cost,
-        category_id: req.body.category_id,
-        ext_description: req.body.ext_description,
-        product_img: req.body.product_img,
-        ext_product_url: req.body.ext_product_url,
-        int_notes: req.body.int_notes
-    }, {
-        where: {
-            id: inventoryId
-        }
-    });
+app.post(
+    '/inventory/:id', 
+    body('quantity').isInt({ min: 1 }),
+    body('product_img').isURL(),
+    body('ext_product_url').isURL(),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            console.log({ errors: errors.array() });
+            const errReason = [];
+            for (let i=0;i<errors.array().length;i++) {
+                errReason.push(errors.array()[i].param.toUpperCase());
+            }
+            return res.render('error', { 
+                title: 'Something went wrong...', 
+                reason: errReason,
+                message: 'Looks like one or more fields need to be corrected. Please see below and click Back to try again, or Home to return to the main page.' 
+            });
+        };
+        const inventoryId = req.params.id;
+        Inventory.update({
+            product_name: req.body.product_name,
+            brand: req.body.brand,
+            sku: req.body.sku,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            cost: req.body.cost,
+            category_id: req.body.category_id,
+            ext_description: req.body.ext_description,
+            product_img: req.body.product_img,
+            ext_product_url: req.body.ext_product_url,
+            int_notes: req.body.int_notes
+        }, {
+            where: {
+                id: inventoryId
+            }
+        });
 
-    res.render('success', { title: 'Success', message: 'Edited product successfully!' });
+        res.render('success', { title: 'Success', message: 'Edited product successfully!' });
 });
 
 

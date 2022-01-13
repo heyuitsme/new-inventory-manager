@@ -24,43 +24,43 @@ html
             - var id = product.id
                 form(id='product-form', action='/inventory/#{id}', method='post')
                     div 
-                        label(for='product_name') Product Name 
-                            input(id='product_name', type='text', value=product.product_name, name='product_name')
+                        label(for='product_name') Product Name* 
+                            input(id='product_name', type='text', value=product.product_name, name='product_name', required, placeholder='Product Y')
                     div
                         span &nbsp;
 
                     div 
-                        label(for='brand') Brand 
-                            input(id='brand', type='text', value=product.brand, name='brand')
+                        label(for='brand') Brand* 
+                            input(id='brand', type='text', value=product.brand, name='brand', required, placeholder='Brand X')
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='sku') SKU 
-                            input(id='sku', type='text', value=product.sku, name='sku')
+                        label(for='sku') SKU* 
+                            input(id='sku', type='text', value=product.sku, name='sku', required, placeholder='SKU12345')
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='quantity') Quantity 
-                            input(id='quantity', type='number', value=product.quantity, name='quantity')
+                        label(for='quantity') Quantity* 
+                            input(id='quantity', type='number', value=product.quantity, name='quantity', required)
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='price') Price 
-                            input(id='price', type='number', value=product.price, name='price', step='.01')
+                        label(for='price') Price* 
+                            input(id='price', type='number', value=product.price, name='price', step='.01', required)
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='cost') Cost 
-                            input(id='cost', type='number', value=product.cost, name='cost', step='.01')
+                        label(for='cost') Cost* 
+                            input(id='cost', type='number', value=product.cost, name='cost', step='.01', required)
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='category') Category 
+                        label(for='category') Category* 
                             select(id='category')
                                 each row in category 
                                     option(selected=(product.category_id == row.id), value=row.id, id='category_id') #{row.category_name}
@@ -69,33 +69,35 @@ html
 
                     div 
                         label(for='ext_description') Product Description 
-                            textarea(id='ext_description', type='text', value=product.ext_description, name='ext_description') #{product.ext_description}
+                            textarea(id='ext_description', type='text', value=product.ext_description, name='ext_description', placeholder='A description for customers to see.') #{product.ext_description}
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='product_img') Product Image
-                            input(id='product_img', type='text', value=product.product_img, name='product_img')
+                        label(for='product_img') Product Image URL*
+                            input(id='product_img', type='text', value=product.product_img, name='product_img', required, placeholder='https://www.google.ca/logo.png')
                     div
                         span &nbsp;
                     
                     div 
-                        label(for='ext_product_url') External Product URL
-                            input(id='ext_product_url', type='text', value=product.ext_product_url, name='ext_product_url')
+                        label(for='ext_product_url') External Product URL*
+                            input(id='ext_product_url', type='text', value=product.ext_product_url, name='ext_product_url', required, placeholder='https://www.google.ca')
                     div
                         span &nbsp;
                     
                     div 
                         label(for='int_notes') Internal Notes
-                            textarea(id='int_notes', type='text', value=product.int_notes, name='int_notes') #{product.int_notes}
+                            textarea(id='int_notes', type='text', value=product.int_notes, name='int_notes', placeholder='Notes for internal users.') #{product.int_notes}
                     div
                         span &nbsp;
+
+                    div 
+                        p (*) denotes a required field.
                     
                     div 
                         span &nbsp;
                     
                     div 
-                        //- input(id='edit-button', type='submit', value='Update Product', name='edit', onclick='editInventory("#{id}")')
                         button(id='edit-button', type='submit') Update Product
             
                 

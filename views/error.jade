@@ -1,6 +1,19 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+
+  head
+    title=title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascript/main.js')
+
+  h1=title
+
+  p= message
+  p Error(s): #{reason}
+
+  | &nbsp;
+  button(onclick='nav("/")') Home
+  | &nbsp;
+  button(onclick='back()') Back
+
